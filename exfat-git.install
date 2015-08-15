@@ -1,0 +1,27 @@
+#/bin/sh
+
+_KERNELS=`cat /usr/lib/modules/extramodules*/version`
+
+_depmod() {
+    for _kernver in $_KERNELS; do  
+        depmod $_kernver
+    done
+}
+
+post_install() {
+#    echo -e "Var1=$1\nVar2=$2\n"
+    _depmod
+      cat << EOF
+==> $1 ${1%-*}
+==> $2 ${2%-*}
+EOF
+
+}
+
+post_upgrade() {
+    _depmod
+}
+
+post_remove() {
+    _depmod
+}
